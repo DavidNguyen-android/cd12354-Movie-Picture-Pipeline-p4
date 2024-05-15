@@ -79,6 +79,7 @@ jobs:
       - name: Push Docker image
         working-directory: ./starter/backend
         run: |
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }}  --password-stdin
-          docker tag my-backend-app ${{ secrets.DOCKERHUB_USERNAME }}/my-backend-app
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-backend-app
+          echo "${{ secrets.DOCKERHUB_USERNAME }}"
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}"  --password-stdin
+          docker tag my-backend-app "${{ secrets.DOCKERHUB_USERNAME }}"/my-backend-app
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}"/my-backend-app
