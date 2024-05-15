@@ -58,6 +58,7 @@ jobs:
       #   run: pipenv run test
 
   build:
+    environment: udavity
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
