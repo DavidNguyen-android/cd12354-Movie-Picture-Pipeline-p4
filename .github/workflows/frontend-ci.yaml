@@ -29,9 +29,11 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        working-directory: ./starter/frontend
         run: npm ci
 
       - name: Run linting
+        working-directory: ./starter/frontend
         run: npm run lint
 
   test:
@@ -55,9 +57,11 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        working-directory: ./starter/frontend
         run: npm ci
 
       - name: Run tests
+        working-directory: ./starter/frontend
         run: npm run test
 
   build:
@@ -82,7 +86,9 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        working-directory: ./starter/frontend
         run: npm ci
 
       - name: Build application using Docker
+        working-directory: ./starter/frontend
         run: npm run build
