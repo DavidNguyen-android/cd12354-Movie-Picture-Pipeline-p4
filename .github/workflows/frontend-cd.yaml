@@ -46,10 +46,15 @@ jobs:
       #     docker build \
       #       --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
       #       -t my-frontend-app .
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
 
       - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
         with:
+          mask-password: 'false'
           registry: 746263314120.dkr.ecr.us-east-1.amazonaws.com
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
