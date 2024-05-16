@@ -65,7 +65,7 @@ jobs:
           aws eks --region us-east-1 update-kubeconfig --name my-cluster-2
 
       - name: Set up Kustomize
-        uses: kubernetes-sigs/kustomize/setup@v0.3.1
+        uses: kubernetes-sigs/kustomize/setup@v4.5.7
 
       - name: Kustomize build
         run: |
