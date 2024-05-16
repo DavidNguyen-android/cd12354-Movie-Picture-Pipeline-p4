@@ -45,7 +45,7 @@ jobs:
         run: |
           docker build \
             --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
-            -t my-frontend-app .
+            -t udacityp4 .
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
