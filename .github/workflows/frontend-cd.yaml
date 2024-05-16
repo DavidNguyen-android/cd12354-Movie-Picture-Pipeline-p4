@@ -50,16 +50,16 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
         with:
           mask-password: 'false'
           registry: 746263314120.dkr.ecr.us-east-1.amazonaws.com
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: us-east-1
+
 
       # - name: Push Docker image to ECR
       #   run: |
