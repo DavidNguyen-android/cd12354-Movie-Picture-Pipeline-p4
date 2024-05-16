@@ -1,59 +1,25 @@
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: coworking
-# spec:
-#   type: LoadBalancer
-#   selector:
-#     service: coworking
-#   ports:
-#   - name: "5153"
-#     protocol: TCP
-#     port: 5153
-#     targetPort: 5153
-# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: coworking
+  name: udacityp4backend
   labels:
-    name: coworking
+    app: udacityp4backend
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      service: coworking
+        app: udacityp4backend
+  replicas: 1
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        service: coworking
+        app: udacityp4backend
     spec:
       containers:
-      - name: coworking
-        image: 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
-        # command: ["/bin/sh"]
-        # args: ["-c", "while true; do echo hello; sleep 10;done"]
-        # image: nginx
-        imagePullPolicy: Always
-        # livenessProbe:
-        #   httpGet:
-        #     path: /health_check
-        #     port: 5153
-        #   initialDelaySeconds: 5
-        #   timeoutSeconds: 2
-        # readinessProbe:
-        #   httpGet:
-        #     path: "/readiness_check"
-        #     port: 5153
-        #   initialDelaySeconds: 5
-        #   timeoutSeconds: 5
-        # envFrom:
-        # - configMapRef:
-        #     name: coworking-postgresql
-        # env:
-        # - name: DB_PASSWORD
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coworking-secret
-        #       key: DB_PASSWORD
-      restartPolicy: Always
+        - name: udacityp4backend
+          image: 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          imagePullPolicy: Always
