@@ -61,7 +61,7 @@ jobs:
           docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
           docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
 
-      # - name: Deploy application to EKS cluster
-      #   working-directory: ./starter/backend
-      #   run: |
-      #     kubectl apply -f deployment-backend.yaml
+      - name: Deploy application to EKS cluster
+        working-directory: ./starter/backend
+        run: |
+          kubectl apply -f deployment-backend.yaml
