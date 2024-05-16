@@ -59,11 +59,6 @@ jobs:
       #   run: |
       #     docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
       #     docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
-      
-      - name: Install kubectl
-        uses: azure/kubectl@v1
-        with:
-          version: "latest"
 
       - name: Configure kubectl
         run: |
