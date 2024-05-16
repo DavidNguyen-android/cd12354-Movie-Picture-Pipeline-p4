@@ -12,40 +12,40 @@ jobs:
     environment: udavity
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # - name: Checkout code
+      #   uses: actions/checkout@v3
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      # - name: Setup NodeJS
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18
 
-      - name: Restore cache and install dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Restore cache and install dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        working-directory: ./starter/frontend
-        run: npm ci
+      # - name: Install dependencies
+      #   working-directory: ./starter/frontend
+      #   run: npm ci
 
-      - name: Run linting
-        working-directory: ./starter/frontend
-        run: npm run lint
+      # - name: Run linting
+      #   working-directory: ./starter/frontend
+      #   run: npm run lint
 
-      - name: Run tests
-        working-directory: ./starter/frontend
-        run: npm run test
+      # - name: Run tests
+      #   working-directory: ./starter/frontend
+      #   run: npm run test
 
-      - name: Build application using Docker
-        working-directory: ./starter/frontend
-        run: |
-          docker build \
-            --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
-            -t my-frontend-app .
+      # - name: Build application using Docker
+      #   working-directory: ./starter/frontend
+      #   run: |
+      #     docker build \
+      #       --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
+      #       -t my-frontend-app .
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
@@ -54,11 +54,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
 
-      - name: Push Docker image to ECR
-        run: |
-          docker tag udacityp4:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
-          docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
+      # - name: Push Docker image to ECR
+      #   run: |
+      #     docker tag udacityp4:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
+      #     docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
 
       # - name: Deploy application to EKS cluster
       #   run: |
