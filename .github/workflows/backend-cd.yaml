@@ -64,6 +64,11 @@ jobs:
         run: |
           aws eks --region us-east-1 update-kubeconfig --name my-cluster-2
 
+      - name: Deploy service to EKS cluster
+        working-directory: ./starter/backend
+        run: |
+          kubectl apply -f backend-service.yaml
+
       - name: Deploy application to EKS cluster
         working-directory: ./starter/backend
         run: |
