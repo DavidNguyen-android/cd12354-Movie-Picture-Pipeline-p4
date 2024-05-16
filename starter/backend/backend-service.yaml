@@ -4,7 +4,7 @@ metadata:
   name: udacityp4backend-service
 spec:
   ports:
-  - port: 80
-    targetPort: 80
+  - port: 5000
+    targetPort: 5000
   selector:
     app: udacityp4backend
