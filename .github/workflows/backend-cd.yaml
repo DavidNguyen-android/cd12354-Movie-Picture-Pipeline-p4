@@ -1,0 +1,67 @@
+name: Backend Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: udavity
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install pipenv
+        working-directory: ./starter/backend
+        run: pip install pipenv 
+
+      - name: Install dependencies
+        working-directory: ./starter/backend
+        run: pipenv install  --deploy --dev
+      
+      - name: Linting
+        working-directory: ./starter/backend
+        run: pipenv run lint
+
+      - name: Testing
+        # Add your testing command here
+        working-directory: ./starter/backend
+        run: pipenv run test
+
+      - name: Build application using Docker
+        working-directory: ./starter/backend
+        run: |
+          docker build -t udacityp4backend .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: 'false'
+          registry: 746263314120.dkr.ecr.us-east-1.amazonaws.com
+
+
+      - name: Push Docker image to ECR
+        run: |
+          docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+          docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+
+      # - name: Deploy application to EKS cluster
+      #   working-directory: ./starter/backend
+      #   run: |
+      #     kubectl apply -f deployment-backend.yaml
