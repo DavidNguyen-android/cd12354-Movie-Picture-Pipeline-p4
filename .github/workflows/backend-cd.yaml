@@ -11,35 +11,35 @@ jobs:
     environment: udavity
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # - name: Checkout code
+      #   uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.10'
 
-      - name: Install pipenv
-        working-directory: ./starter/backend
-        run: pip install pipenv 
+      # - name: Install pipenv
+      #   working-directory: ./starter/backend
+      #   run: pip install pipenv 
 
-      - name: Install dependencies
-        working-directory: ./starter/backend
-        run: pipenv install  --deploy --dev
+      # - name: Install dependencies
+      #   working-directory: ./starter/backend
+      #   run: pipenv install  --deploy --dev
       
-      - name: Linting
-        working-directory: ./starter/backend
-        run: pipenv run lint
+      # - name: Linting
+      #   working-directory: ./starter/backend
+      #   run: pipenv run lint
 
-      - name: Testing
-        # Add your testing command here
-        working-directory: ./starter/backend
-        run: pipenv run test
+      # - name: Testing
+      #   # Add your testing command here
+      #   working-directory: ./starter/backend
+      #   run: pipenv run test
 
-      - name: Build application using Docker
-        working-directory: ./starter/backend
-        run: |
-          docker build -t udacityp4backend .
+      # - name: Build application using Docker
+      #   working-directory: ./starter/backend
+      #   run: |
+      #     docker build -t udacityp4backend .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -55,11 +55,19 @@ jobs:
           mask-password: 'false'
           registry: 746263314120.dkr.ecr.us-east-1.amazonaws.com
 
+      # - name: Push Docker image to ECR
+      #   run: |
+      #     docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+      #     docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+      
+      - name: Install kubectl
+        uses: azure/kubectl@v1
+        with:
+          version: "latest"
 
-      - name: Push Docker image to ECR
+      - name: Configure kubectl
         run: |
-          docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
-          docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+          aws eks --region us-east-1 update-kubeconfig --name my-cluster
 
       - name: Deploy application to EKS cluster
         working-directory: ./starter/backend
