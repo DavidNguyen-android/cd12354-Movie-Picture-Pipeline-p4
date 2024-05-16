@@ -64,12 +64,13 @@ jobs:
         run: |
           aws eks --region us-east-1 update-kubeconfig --name my-cluster-2
 
-      - name: Deploy service to EKS cluster
-        working-directory: ./starter/backend
-        run: |
-          kubectl apply -f backend-service.yaml
+      - name: Set up Kustomize
+        uses: kubernetes-sigs/kustomize/setup@v0.3.1
 
-      - name: Deploy application to EKS cluster
-        working-directory: ./starter/backend
+      - name: Kustomize build
         run: |
-          kubectl apply -f deployment-backend.yaml
+          kustomize build starter/backend/k8s > kustomization.yaml
+      
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f starter/backend/k8s/kustomization.yaml
