@@ -75,3 +75,4 @@ jobs:
         run: |
           kustomize edit set image frontend=746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
           kustomize build | kubectl apply -f -
+          
