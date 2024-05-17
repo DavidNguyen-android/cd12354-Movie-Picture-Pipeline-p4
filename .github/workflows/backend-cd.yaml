@@ -55,22 +55,18 @@ jobs:
           mask-password: 'false'
           registry: 746263314120.dkr.ecr.us-east-1.amazonaws.com
 
-      # - name: Push Docker image to ECR
-      #   run: |
-      #     docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
-      #     docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+      - name: Push Docker image to ECR
+        run: |
+          docker tag udacityp4backend:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+          docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
 
       - name: Configure kubectl
         run: |
           aws eks --region us-east-1 update-kubeconfig --name my-cluster-2
 
-      - name: Set up Kustomize
-        uses: kubernetes-sigs/kustomize/setup@v4.5.7
 
-      - name: Kustomize build
+      - name: Deploy Docker Image to Amazon EKS
+        working-directory: ./starter/backend/k8s
         run: |
-          kustomize build starter/backend/k8s > kustomization.yaml
-      
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f starter/backend/k8s/kustomization.yaml
+          kustomize edit set image backend=746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4backend:latest
+          kustomize build | kubectl apply -f -

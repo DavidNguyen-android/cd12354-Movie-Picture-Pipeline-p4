@@ -65,8 +65,13 @@ jobs:
         run: |
           docker tag udacityp4:latest 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
           docker push 746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
+      
+      - name: Configure kubectl
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name my-cluster-2
 
-      # - name: Deploy application to EKS cluster
-      #   working-directory: ./starter/frontend
-      #   run: |
-      #     kubectl apply -f deployment-frontend.yaml
+      - name: Deploy Docker Image to Amazon EKS
+        working-directory: ./starter/frontend/k8s
+        run: |
+          kustomize edit set image frontend=746263314120.dkr.ecr.us-east-1.amazonaws.com/udacityp4:latest
+          kustomize build | kubectl apply -f -
